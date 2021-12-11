@@ -1,11 +1,11 @@
-inputArray = [x.split(" ") for x in open("input/inputDay2Part2")]
 depth, forward, aim = 0, 0, 0
-for i in inputArray:
+for i in [x.split(" ") for x in open("input/inputDay2Part2")]:
+    number = int(i[1])
     if i[0] == "forward":
-        forward += int(i[1])
-        depth += aim * int(i[1])
+        forward += number
+        depth += aim * number
     elif i[0] == "up":
-        aim -= int(i[1])
+        aim -= number
     else:
-        aim += int(i[1])
+        aim += number
 print(depth * forward)

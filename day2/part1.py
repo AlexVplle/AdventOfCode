@@ -1,10 +1,10 @@
-inputArray = [x.split(" ") for x in open("input/inputDay2")]
 depth, forward = 0, 0
-for i in inputArray:
+for i in [x.split(" ") for x in open("input/inputDay2")]:
+    number = int(i[1])
     if i[0] == "forward":
-        forward += int(i[1])
+        forward += number
     elif i[0] == "up":
-        depth -= int(i[1])
+        depth -= number
     else:
-        depth += int(i[1])
+        depth += number
 print(depth * forward)
