@@ -1,7 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 use std::{
     cmp::Ordering,
-    collections::{HashMap, HashSet},
+    collections::{HashMap, HashSet}, str::Chars,
 };
 
 #[derive(Debug)]
@@ -16,7 +16,7 @@ enum Hand {
 }
 
 #[aoc_generator(day7)]
-fn parse_input(input: &str) -> Vec<(String, u32)> {
+fn parse_input(input: &str) -> Vec<(String, usize)> {
     input
         .lines()
         .map(|line: &str| line.split_once(' ').unwrap())
@@ -25,29 +25,37 @@ fn parse_input(input: &str) -> Vec<(String, u32)> {
 }
 
 #[aoc(day7, part1)]
-fn part1(input: &Vec<(String, u32)>) -> u32 {
-    input.into_iter().for_each(|(hand_cards, bid)| {
-        dbg!(get_hand_type(hand_cards.to_string()));
-    });
-    0
+fn part1(input: &Vec<(String, usize)>) -> usize {
+    let mut mut_input = input.clone();
+    mut_input.sort_by(compare_two_hand_cards);
+    mut_input.into_iter().enumerate().map(|(index, value)| (index + 1) * value.1).sum()
 }
 
-fn compare_two_hand_cards(a: (String, u32), b: (String, u32)) -> Ordering {
-    let a_type: u8 = get_hand_type(a.0) as u8;
-    let b_type: u8 = get_hand_type(b.0) as u8;
+fn compare_two_hand_cards(a: &(String, usize), b: &(String, usize)) -> Ordering {
+    let a_type: u8 = get_hand_type(&a.0) as u8;
+    let b_type: u8 = get_hand_type(&b.0) as u8;
     if a_type > b_type {
         return Ordering::Greater;
     }
     if a_type < b_type {
         return Ordering::Less;
     }
-    let a_iter = a.0.chars()
-    while let Some() {
-        
+    let mut a_iter: Chars = a.0.chars();
+    let mut b_iter: Chars = b.0.chars();
+    while let (Some(a_char), Some(b_char)) = (a_iter.next(), b_iter.next()) {
+        let rank_letter_a: u8 = a_char.get_rank_letter();
+        let rank_letter_b: u8 = b_char.get_rank_letter();
+        if rank_letter_a > rank_letter_b {
+            return Ordering::Greater;
+        }
+        if rank_letter_a < rank_letter_b {
+            return Ordering::Less;
+        }
     }
+    Ordering::Equal
 }
 
-fn get_hand_type(hand_cards: String) -> Hand {
+fn get_hand_type(hand_cards: &String) -> Hand {
     let hash_set: HashSet<char> = HashSet::from_iter(hand_cards.chars());
     if hash_set.len() == 1 {
         return Hand::FiveOfAKind;
@@ -102,6 +110,6 @@ fn get_rank_letter(&self) -> u8 {
 
 
 #[aoc(day7, part2)]
-fn part2(input: &Vec<(String, u32)>) -> u32 {
+fn part2(input: &Vec<(String, usize)>) -> u32 {
     0
 }
